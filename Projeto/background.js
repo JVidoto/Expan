@@ -1,0 +1,1 @@
+// vai servir depois pra IA e lógica mais pesada
