@@ -1,3 +1,5 @@
+console.log("POPUP JS CARREGOU");
+1
 function loadScripts() {
   chrome.storage.local.get(["scripts"], (result) => {
 
