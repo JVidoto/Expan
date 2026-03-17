@@ -1,47 +1,65 @@
 console.log("POPUP JS CARREGOU");
-1
-function loadScripts() {
-  chrome.storage.local.get(["scripts"], (result) => {
 
-    let scripts = result.scripts;
+document.addEventListener("DOMContentLoaded", () => {
 
-    // AQUI ESTÁ A CORREÇÃO
-    if (!scripts) {
-      scripts = {
-        "/teste": "Isso é um teste",
-        "/clip": "Conteúdo: {clipboard}"
-      };
+  const listDiv = document.getElementById("list");
 
-      chrome.storage.local.set({ scripts });
-    }
+  function loadScripts() {
+    chrome.storage.local.get(["scripts"], (result) => {
 
-    listDiv.innerHTML = "";
+      let scripts = result.scripts;
 
-    for (let key in scripts) {
-      const div = document.createElement("div");
+      //  inicializa se não existir
+      if (!scripts) {
+        scripts = {
+          "/teste": "Isso é um teste",
+          "/clip": "Conteúdo: {clipboard}"
+        };
 
-      div.style.display = "flex";
-      div.style.justifyContent = "space-between";
-      div.style.marginBottom = "5px";
+        chrome.storage.local.set({ scripts });
+      }
 
-      const text = document.createElement("span");
-      text.innerText = `${key} --> ${scripts[key]}`;
+      console.log("scripts carregados:", scripts); // debug
 
-      const btn = document.createElement("button");
-      btn.innerText = "X";
+      listDiv.innerHTML = "";
 
-      btn.onclick = () => {
-        delete scripts[key];
+      for (let key in scripts) {
+        const div = document.createElement("div");
 
-        chrome.storage.local.set({ scripts }, () => {
-          loadScripts();
-        });
-      };
+        div.style.display = "flex";
+        div.style.justifyContent = "space-between";
+        div.style.marginBottom = "5px";
 
-      div.appendChild(text);
-      div.appendChild(btn);
+        const text = document.createElement("span");
+        text.innerText = `${key} --> ${scripts[key]}`;
 
-      listDiv.appendChild(div);
+        const btn = document.createElement("button");
+        btn.innerText = "X";
+
+        btn.onclick = () => {
+          delete scripts[key];
+
+          chrome.storage.local.set({ scripts }, () => {
+            loadScripts();
+          });
+        };
+
+        div.appendChild(text);
+        div.appendChild(btn);
+
+        listDiv.appendChild(div);
+      }
+    });
+  }
+
+  //  FORÇA carregar ao abrir
+  setTimeout(loadScripts, 100);
+
+  //  ESCUTA mudanças no storage
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === "local" && changes.scripts) {
+      loadScripts();
     }
   });
-}
+
+});
