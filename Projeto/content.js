@@ -41,3 +41,5 @@ document.addEventListener("input", async (e) => {
     }
   }
 });
+
+console.log("CONTENT SCRIPT RODANDO");
