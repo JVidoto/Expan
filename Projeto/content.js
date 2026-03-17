@@ -1,5 +1,5 @@
 const triggers = {
-  "/teste": "Isso é um teste",
+  "/teste": "Isso é um teste /clip",
   "/clip": "Conteúdo: {clipboard}"
 };
 
