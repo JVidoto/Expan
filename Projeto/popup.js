@@ -15,10 +15,10 @@ function loadScripts() {
       text.innerText = `${key} → ${scripts[key]}`;
 
       const btn = document.createElement("button");
-      btn.innerText = "❌";
+      btn.innerText = "X";
       btn.style.marginLeft = "10px";
 
-      // 🔥 botão de deletar
+      //  botão de deletar
       btn.onclick = () => {
         delete scripts[key];
 
@@ -50,5 +50,9 @@ saveBtn.onclick = () => {
     });
   });
 };
+
+div.style.display = "flex";
+div.style.justifyContent = "space-between";
+div.style.marginBottom = "5px";
 
 loadScripts();
