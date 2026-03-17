@@ -1,36 +1,42 @@
 const triggers = {
   "/teste": "Isso é um teste",
   "/clip": "Conteúdo: {clipboard}"
-  "/oi": "Olá, tudo bem com você, la la la la la la"
 };
 
 document.addEventListener("input", async (e) => {
   const el = e.target;
 
-  if (el.tagName !== "TEXTAREA" && el.tagName !== "INPUT") return;
+  const isInput =
+    el.tagName === "TEXTAREA" ||
+    el.tagName === "INPUT" ||
+    el.isContentEditable;
 
-  const value = el.value;
+  if (!isInput) return;
+
+  let value = el.isContentEditable ? el.innerText : el.value;
 
   for (let trigger in triggers) {
     if (value.endsWith(trigger)) {
-
       let text = triggers[trigger];
 
-      // CLIPBOARD
+      // clipboard
       if (text.includes("{clipboard}")) {
         try {
           const clip = await navigator.clipboard.readText();
           text = text.replace("{clipboard}", clip);
-        } catch (err) {
+        } catch {
           text = text.replace("{clipboard}", "[erro clipboard]");
         }
       }
 
-      const newValue = value.replace(trigger, text);
+      let newValue = value.replace(trigger, text);
 
-      el.value = newValue;
+      if (el.isContentEditable) {
+        el.innerText = newValue;
+      } else {
+        el.value = newValue;
+      }
 
-      // importante pra frameworks tipo React
       el.dispatchEvent(new Event("input", { bubbles: true }));
     }
   }
