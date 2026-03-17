@@ -12,7 +12,7 @@ function loadScripts() {
       const div = document.createElement("div");
 
       const text = document.createElement("span");
-      text.innerText = `${key} → ${scripts[key]}`;
+      text.innerText = `${key} -> ${scripts[key]}`;
 
       const btn = document.createElement("button");
       btn.innerText = "X";
@@ -55,4 +55,6 @@ div.style.display = "flex";
 div.style.justifyContent = "space-between";
 div.style.marginBottom = "5px";
 
-loadScripts();
+document.addEventListener("DOMContentLoaded", () => {
+  loadScripts();
+});
