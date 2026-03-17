@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "scripts-expansor.json";
+    a.download = "scripts-expan.json";
     a.click();
 
     URL.revokeObjectURL(url);
