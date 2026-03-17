@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", () => {
+
 const triggerInput = document.getElementById("trigger");
 const contentInput = document.getElementById("content");
 const listDiv = document.getElementById("list");
@@ -55,6 +57,6 @@ div.style.display = "flex";
 div.style.justifyContent = "space-between";
 div.style.marginBottom = "5px";
 
-document.addEventListener("DOMContentLoaded", () => {
+
   loadScripts();
 });
