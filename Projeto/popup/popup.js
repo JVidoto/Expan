@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const contentInput = document.getElementById("content");
   const listDiv = document.getElementById("list");
   const saveBtn = document.getElementById("save");
+  const exportBtn = document.getElementById("export");
+  const importBtn = document.getElementById("import");
+  const importFile = document.getElementById("importFile");
 
   function loadScripts() {
     chrome.storage.local.get(["scripts"], (result) => {
@@ -108,5 +111,56 @@ document.addEventListener("DOMContentLoaded", () => {
       loadScripts();
     }
   });
+  
+  // EXPORTAR
+  exportBtn.onclick = () => {
+  chrome.storage.local.get(["scripts"], (result) => {
+    const scripts = result.scripts || {};
+
+    const blob = new Blob(
+      [JSON.stringify(scripts, null, 2)],
+      { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "scripts-expansor.json";
+    a.click();
+
+    URL.revokeObjectURL(url);
+    });
+  };
+
+  //  IMPORTAR (abre seletor)
+  importBtn.onclick = () => {
+    importFile.click();
+  };
+
+  //  LER ARQUIVO
+  importFile.onchange = (e) => {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      try {
+        const scripts = JSON.parse(reader.result);
+
+        chrome.storage.local.set({ scripts }, () => {
+          loadScripts();
+          alert("Importado com sucesso!");
+        });
+
+      } catch {
+        alert("Arquivo inválido!");
+      }
+    };
+
+    reader.readAsText(file);
+  };
 
 });
