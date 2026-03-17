@@ -10,7 +10,26 @@ function loadScripts() {
 
     for (let key in scripts) {
       const div = document.createElement("div");
-      div.innerText = `${key} → ${scripts[key]}`;
+
+      const text = document.createElement("span");
+      text.innerText = `${key} → ${scripts[key]}`;
+
+      const btn = document.createElement("button");
+      btn.innerText = "❌";
+      btn.style.marginLeft = "10px";
+
+      // 🔥 botão de deletar
+      btn.onclick = () => {
+        delete scripts[key];
+
+        chrome.storage.local.set({ scripts }, () => {
+          loadScripts(); // recarrega lista
+        });
+      };
+
+      div.appendChild(text);
+      div.appendChild(btn);
+
       listDiv.appendChild(div);
     }
   });
