@@ -35,6 +35,16 @@ function loadScripts() {
       listDiv.appendChild(div);
     }
   });
+    let scripts = result.scripts;
+
+    if (!scripts) {
+        scripts = {
+        "/teste": "Isso é um teste",
+        "/clip": "Conteúdo: {clipboard}"
+    };
+
+    chrome.storage.local.set({ scripts });
+}
 }
 
 saveBtn.onclick = () => {
