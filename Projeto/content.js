@@ -4,7 +4,7 @@ const triggers = {
 };
 
 // tempo máximo entre teclas (ms)
-const MAX_DELAY = 800;
+const MAX_DELAY = 600;
 
 let lastTyped = "";
 let lastTime = Date.now();
