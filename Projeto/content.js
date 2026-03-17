@@ -1,7 +1,12 @@
-const triggers = {
-  "/teste": "Isso é um teste /clip",
-  "/clip": "Conteúdo: {clipboard}"
-};
+let triggers = {};
+
+// carregar scripts salvos
+chrome.storage.local.get(["scripts"], (result) => {
+  triggers = result.scripts || {
+    "/teste": "Isso é um teste",
+    "/clip": "Conteúdo: {clipboard}"
+  };
+});
 
 // tempo máximo entre teclas (ms)
 const MAX_DELAY = 600;
