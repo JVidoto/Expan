@@ -2,14 +2,17 @@ console.log("POPUP JS CARREGOU");
 
 document.addEventListener("DOMContentLoaded", () => {
 
+  const triggerInput = document.getElementById("trigger");
+  const contentInput = document.getElementById("content");
   const listDiv = document.getElementById("list");
+  const saveBtn = document.getElementById("save");
 
   function loadScripts() {
     chrome.storage.local.get(["scripts"], (result) => {
 
       let scripts = result.scripts;
 
-      //  inicializa se não existir
+      // inicializa se não existir
       if (!scripts) {
         scripts = {
           "/teste": "Isso é um teste",
@@ -19,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
         chrome.storage.local.set({ scripts });
       }
 
-      console.log("scripts carregados:", scripts); // debug
+      console.log("scripts carregados:", scripts);
 
       listDiv.innerHTML = "";
 
@@ -52,10 +55,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  //  FORÇA carregar ao abrir
+  //  BOTÃO SALVAR (isso que faltava)
+  saveBtn.onclick = () => {
+    const trigger = triggerInput.value.trim();
+    const content = contentInput.value;
+
+    if (!trigger) return;
+
+    chrome.storage.local.get(["scripts"], (result) => {
+      const scripts = result.scripts || {};
+
+      scripts[trigger] = content;
+
+      chrome.storage.local.set({ scripts }, () => {
+        triggerInput.value = "";
+        contentInput.value = "";
+        loadScripts();
+      });
+    });
+  };
+
+  // carregar ao abrir
   setTimeout(loadScripts, 100);
 
-  //  ESCUTA mudanças no storage
+  // escutar mudanças
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area === "local" && changes.scripts) {
       loadScripts();
