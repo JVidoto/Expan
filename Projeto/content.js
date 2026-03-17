@@ -1,7 +1,13 @@
 const triggers = {
-  "/teste": "Isso é um teste /clip",
+  "/teste": "Isso é um teste",
   "/clip": "Conteúdo: {clipboard}"
 };
+
+// tempo máximo entre teclas (ms)
+const MAX_DELAY = 800;
+
+let lastTyped = "";
+let lastTime = Date.now();
 
 document.addEventListener("input", async (e) => {
   const el = e.target;
@@ -13,11 +19,30 @@ document.addEventListener("input", async (e) => {
 
   if (!isInput) return;
 
+  let now = Date.now();
+
   let value = el.isContentEditable ? el.innerText : el.value;
 
+  // pega só o último pedaço digitado
+  let current = value.slice(-10);
+
+  // verifica tempo entre digitação
+  if (now - lastTime > MAX_DELAY) {
+    lastTyped = "";
+  }
+
+  lastTyped += current.slice(-1);
+  lastTime = now;
+
   for (let trigger in triggers) {
-    if (value.endsWith(trigger)) {
+    if (lastTyped.endsWith(trigger)) {
+
       let text = triggers[trigger];
+
+      // 🔒 evita execução em cadeia
+      text = text.replace(/\/\w+/g, (match) => {
+        return match; // mantém como texto normal
+      });
 
       // clipboard
       if (text.includes("{clipboard}")) {
@@ -38,8 +63,13 @@ document.addEventListener("input", async (e) => {
       }
 
       el.dispatchEvent(new Event("input", { bubbles: true }));
+
+      // 🧹 reseta buffer (ESSENCIAL)
+      lastTyped = "";
+
+      break;
     }
   }
 });
 
-console.log("CONTENT SCRIPT RODANDO");
+console.log("Content script carregado");
