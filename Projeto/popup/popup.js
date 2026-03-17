@@ -30,25 +30,49 @@ document.addEventListener("DOMContentLoaded", () => {
         const div = document.createElement("div");
 
         div.style.display = "flex";
-        div.style.justifyContent = "space-between";
-        div.style.marginBottom = "5px";
+        div.style.flexDirection = "column";
+        div.style.marginBottom = "10px";
+        div.style.padding = "5px";
+        div.style.border = "1px solid #ccc";
+        div.style.borderRadius = "5px";
 
-        const text = document.createElement("span");
-        text.innerText = `${key} --> ${scripts[key]}`;
+        const triggerInputEdit = document.createElement("input");
+        triggerInputEdit.value = key;
 
-        const btn = document.createElement("button");
-        btn.innerText = "X";
+        const contentInputEdit = document.createElement("textarea");
+        contentInputEdit.value = scripts[key];
 
-        btn.onclick = () => {
-          delete scripts[key];
+        const actions = document.createElement("div");
 
-          chrome.storage.local.set({ scripts }, () => {
-            loadScripts();
-          });
+        const saveBtnEdit = document.createElement("button");
+        saveBtnEdit.innerText = "Salvar";
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "Excluir";
+
+        actions.appendChild(saveBtnEdit);
+        actions.appendChild(deleteBtn);
+
+        //  salvar edição
+        saveBtnEdit.onclick = () => {
+          const newTrigger = triggerInputEdit.value.trim();
+          const newContent = contentInputEdit.value;
+
+          delete scripts[key]; // remove antigo
+          scripts[newTrigger] = newContent;
+
+          chrome.storage.local.set({ scripts }, loadScripts);
         };
 
-        div.appendChild(text);
-        div.appendChild(btn);
+        //  deletar
+        deleteBtn.onclick = () => {
+          delete scripts[key];
+          chrome.storage.local.set({ scripts }, loadScripts);
+        };
+
+        div.appendChild(triggerInputEdit);
+        div.appendChild(contentInputEdit);
+        div.appendChild(actions);
 
         listDiv.appendChild(div);
       }

@@ -44,7 +44,7 @@ document.addEventListener("input", async (e) => {
 
       let text = triggers[trigger];
 
-      // 🔒 evita execução em cadeia
+      //  evita execução em cadeia
       text = text.replace(/\/\w+/g, (match) => {
         return match; // mantém como texto normal
       });
@@ -69,7 +69,7 @@ document.addEventListener("input", async (e) => {
 
       el.dispatchEvent(new Event("input", { bubbles: true }));
 
-      // 🧹 reseta buffer (ESSENCIAL)
+      //  reseta buffer (ESSENCIAL)
       lastTyped = "";
 
       break;
