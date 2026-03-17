@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Expan",
   "version": "1.0",
-  "description": "Expansor de texto com IA"
+  "description": "Expansor de texto com IA",
   
   "permissions": [
     "storage",
